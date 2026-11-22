@@ -1,0 +1,37 @@
+{
+  "delivery": {
+    "summary": "This matches a documented delivery/customs impersonation warning pattern.",
+    "actions": [
+      "Do not pay, reply, or open any link in the message.",
+      "Check the parcel by opening the courier's official website or app yourself (type the address or use the app you already have).",
+      "If the message claims to be from a customs authority, contact that authority only through its official website or channels.",
+      "Report impersonation to the organisation being impersonated (for DHL: phishing@dhl.com, with a screenshot that shows the sender number)."
+    ],
+    "official_route": "Open the courier's official site or app manually; do not use the link in the message."
+  },
+  "banking": {
+    "summary": "This matches a documented bank/central-bank impersonation warning pattern.",
+    "actions": [
+      "Do not reply, and never share card numbers, PINs, passwords or security codes.",
+      "Contact your bank only through the number on its official website or on your card, never a number or link from the message.",
+      "Report bank-related fraud to your bank and through official UAE fraud-reporting channels."
+    ],
+    "official_route": "Use your bank's official app or the contact number printed on your card."
+  },
+  "url_caution": {
+    "summary": "No documented message pattern matched, but a link in the message has suspicious characteristics.",
+    "actions": [
+      "Do not open the link.",
+      "If the message concerns a real account or parcel, go to that organisation's official website or app yourself."
+    ],
+    "official_route": "Navigate to the organisation's official site manually."
+  },
+  "no_match": {
+    "summary": "No documented pattern matched. This does not mean the message is safe.",
+    "actions": [
+      "If the message asks for money, codes or personal details, or creates urgency, verify through an official channel before acting.",
+      "Never use links or phone numbers from the message itself to verify it."
+    ],
+    "official_route": "Verify through the organisation's official website, app, or the number on your card."
+  }
+}

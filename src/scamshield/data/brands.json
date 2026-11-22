@@ -1,0 +1,23 @@
+{
+  "dhl": {
+    "keywords": ["dhl"],
+    "official_domains": ["dhl.com", "dpdhl.com", "dhl-news.com", "dhl.ae"],
+    "country_domain_label": "dhl",
+    "source": "https://www.dhl.com/ae-en/home/footer/fraud-awareness.html"
+  },
+  "abu_dhabi_customs": {
+    "keywords": ["adcustoms"],
+    "official_domains": ["adcustoms.gov.ae"],
+    "source": "https://www.adcustoms.gov.ae/en/Media-Centre/News/Abu-Dhabi-Customs-warns-against-fraudulent-text-messages-impersonating-the-authority"
+  },
+  "cbuae": {
+    "keywords": ["centralbank", "cbuae"],
+    "official_domains": ["centralbank.ae"],
+    "source": "https://www.centralbank.ae/media/avkdwwpj/cbuae-ubf-abu-dhabi-police-and-dubai-police-join-forces-to-launch-uaes-first-national-fraud-awareness-campaign_1.pdf"
+  },
+  "uaebf": {
+    "keywords": ["uaebf"],
+    "official_domains": ["uaebf.ae"],
+    "source": "https://www.centralbank.ae/media/avkdwwpj/cbuae-ubf-abu-dhabi-police-and-dubai-police-join-forces-to-launch-uaes-first-national-fraud-awareness-campaign_1.pdf"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Scam Shield UAE rules file",
+  "type": "object",
+  "required": ["version", "rules"],
+  "additionalProperties": false,
+  "properties": {
+    "version": {"type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$"},
+    "rules": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/rule"}}
+  },
+  "$defs": {
+    "date": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+    "term_group": {
+      "type": "object",
+      "required": ["name", "any"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "any": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "url_group": {
+      "type": "object",
+      "required": ["name", "has_url"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "has_url": {"const": true}
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": ["title", "publisher", "url", "level", "published", "checked"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {"type": "string", "minLength": 1},
+        "publisher": {"type": "string", "minLength": 1},
+        "url": {"type": "string", "pattern": "^https://"},
+        "level": {"const": "primary"},
+        "published": {"anyOf": [{"$ref": "#/$defs/date"}, {"type": "null"}]},
+        "checked": {"$ref": "#/$defs/date"}
+      }
+    },
+    "rule": {
+      "type": "object",
+      "required": ["id", "category", "title", "status", "description", "groups", "template_id", "result", "source", "reviewed"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z]{3}-\\d{3}$"},
+        "category": {"enum": ["delivery", "banking", "job_visa", "government"]},
+        "title": {"type": "string", "minLength": 1},
+        "status": {"enum": ["active", "draft", "retired"]},
+        "description": {"type": "string", "minLength": 20},
+        "groups": {"type": "array", "minItems": 1, "items": {"oneOf": [{"$ref": "#/$defs/term_group"}, {"$ref": "#/$defs/url_group"}]}},
+        "url_flags_any": {
+          "type": "array", "minItems": 1,
+          "items": {"enum": ["shortener", "suspicious_tld", "ip_host", "punycode", "userinfo_trick", "lookalike_brand"]}
+        },
+        "suppress_if_any": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "suppress_if_all_urls_official": {"type": "boolean"},
+        "template_id": {"type": "string", "minLength": 1},
+        "result": {"enum": ["verify"]},
+        "source": {"$ref": "#/$defs/source"},
+        "reviewed": {"$ref": "#/$defs/date"}
+      }
+    }
+  }
+}

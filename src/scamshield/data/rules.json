@@ -1,0 +1,167 @@
+{
+  "version": "0.1.0",
+  "rules": [
+    {
+      "id": "DEL-001",
+      "category": "delivery",
+      "title": "Shipment claim asking you to update or confirm details via a link",
+      "status": "active",
+      "description": "The message mentions a shipment, asks you to update or confirm information, and includes a link. Abu Dhabi Customs warns of fake SMS/iMessage messages impersonating the authority and shipping companies that claim a shipment and ask recipients to update information, with links that may be harmful.",
+      "groups": [
+        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]},
+        {"name": "update_or_confirm", "any": ["update", "confirm", "verify", "validate", "reschedule", "تحديث", "تأكيد", "تحقق", "حدث بياناتك", "حدث معلوماتك"]},
+        {"name": "link", "has_url": true}
+      ],
+      "suppress_if_all_urls_official": true,
+      "template_id": "delivery",
+      "result": "verify",
+      "source": {
+        "title": "Abu Dhabi Customs warns against fraudulent text messages impersonating the authority",
+        "publisher": "Abu Dhabi Customs",
+        "url": "https://www.adcustoms.gov.ae/en/Media-Centre/News/Abu-Dhabi-Customs-warns-against-fraudulent-text-messages-impersonating-the-authority",
+        "level": "primary",
+        "published": "2026-03-10",
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    },
+    {
+      "id": "DEL-002",
+      "category": "delivery",
+      "title": "Shipment message with a shortened link",
+      "status": "active",
+      "description": "The message mentions a shipment and hides its destination behind a link shortener. DHL lists shortened links (for example bit.ly) in fake delivery SMS as a warning sign.",
+      "groups": [
+        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]}
+      ],
+      "url_flags_any": ["shortener"],
+      "template_id": "delivery",
+      "result": "verify",
+      "source": {
+        "title": "Fraud awareness",
+        "publisher": "DHL Express UAE",
+        "url": "https://www.dhl.com/ae-en/home/footer/fraud-awareness.html",
+        "level": "primary",
+        "published": null,
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    },
+    {
+      "id": "DEL-003",
+      "category": "delivery",
+      "title": "Shipment message requesting a fee or payment with a link",
+      "status": "active",
+      "description": "The message ties a payment or fee to a shipment and includes a link. DHL lists payment requests as a fraud pattern and states that its only payment requests by email or SMS are for customs duties and taxes, so unsolicited fee requests should be verified through DHL support rather than the message.",
+      "groups": [
+        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]},
+        {"name": "payment", "any": ["pay", "payment", "fee", "fees", "charge", "charges", "customs duty", "customs duties", "customs fee", "settle", "رسوم", "ادفع", "دفع", "سداد", "سدد"]},
+        {"name": "link", "has_url": true}
+      ],
+      "suppress_if_all_urls_official": true,
+      "template_id": "delivery",
+      "result": "verify",
+      "source": {
+        "title": "Fraud awareness",
+        "publisher": "DHL Express UAE",
+        "url": "https://www.dhl.com/ae-en/home/footer/fraud-awareness.html",
+        "level": "primary",
+        "published": null,
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    },
+    {
+      "id": "DEL-004",
+      "category": "delivery",
+      "title": "Shipment message linking to a lookalike of a courier or customs domain",
+      "status": "active",
+      "description": "The message mentions a shipment and links to a domain that contains a known courier or customs name but is not one of that organisation's published domains. DHL publishes its legitimate sender and link domains and warns of lookalike addresses.",
+      "groups": [
+        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]}
+      ],
+      "url_flags_any": ["lookalike_brand"],
+      "template_id": "delivery",
+      "result": "verify",
+      "source": {
+        "title": "Fraud awareness",
+        "publisher": "DHL Express UAE",
+        "url": "https://www.dhl.com/ae-en/home/footer/fraud-awareness.html",
+        "level": "primary",
+        "published": null,
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    },
+    {
+      "id": "BNK-001",
+      "category": "banking",
+      "title": "Request to send or confirm card, PIN, password or account details",
+      "status": "active",
+      "description": "The message asks you to send, enter or confirm card numbers, PINs, passwords, security codes or account numbers. Dubai Police advise against sharing account numbers, card numbers, passwords, personal identification codes or the security code on the back of a card.",
+      "groups": [
+        {"name": "request", "any": ["send", "share", "provide", "enter", "submit", "reply with", "confirm", "update", "verify", "give us", "ارسل", "ارسال", "شارك", "زود", "ادخل", "ادخال", "تأكيد", "تحديث", "تحقق"]},
+        {"name": "sensitive_detail", "any": ["card number", "card details", "cvv", "cvc", "pin", "password", "security code", "account number", "bank details", "account details", "رقم البطاقة", "رقم الحساب", "الرقم السري", "كلمة المرور", "كلمة السر", "رمز الأمان", "بيانات البطاقة", "بيانات الحساب", "بيانات البنك"]}
+      ],
+      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"],
+      "template_id": "banking",
+      "result": "verify",
+      "source": {
+        "title": "CBUAE, UBF, Abu Dhabi Police and Dubai Police launch national fraud awareness campaign",
+        "publisher": "Central Bank of the UAE",
+        "url": "https://www.centralbank.ae/media/avkdwwpj/cbuae-ubf-abu-dhabi-police-and-dubai-police-join-forces-to-launch-uaes-first-national-fraud-awareness-campaign_1.pdf",
+        "level": "primary",
+        "published": "2020-04-14",
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    },
+    {
+      "id": "BNK-002",
+      "category": "banking",
+      "title": "Bank-branded request to update your bank or card details",
+      "status": "active",
+      "description": "The message refers to your bank, account or card and asks you to update or verify your details. The campaign documents Abu Dhabi Police cases where callers posing as bank staff asked victims to update their bank details.",
+      "groups": [
+        {"name": "bank_context", "any": ["bank", "account", "card", "بنك", "البنك", "حساب", "بطاقة", "بطاقتك"]},
+        {"name": "update", "any": ["update", "verify", "confirm", "validate", "تحديث", "تأكيد", "تحقق"]},
+        {"name": "details", "any": ["bank details", "account details", "card details", "personal details", "your details", "بيانات", "معلومات"]}
+      ],
+      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"],
+      "template_id": "banking",
+      "result": "verify",
+      "source": {
+        "title": "CBUAE, UBF, Abu Dhabi Police and Dubai Police launch national fraud awareness campaign",
+        "publisher": "Central Bank of the UAE",
+        "url": "https://www.centralbank.ae/media/avkdwwpj/cbuae-ubf-abu-dhabi-police-and-dubai-police-join-forces-to-launch-uaes-first-national-fraud-awareness-campaign_1.pdf",
+        "level": "primary",
+        "published": "2020-04-14",
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    },
+    {
+      "id": "BNK-003",
+      "category": "banking",
+      "title": "Message using the Central Bank's name while asking for sensitive details",
+      "status": "active",
+      "description": "The message invokes the Central Bank of the UAE and asks for sensitive account or card details. The CBUAE urges caution when sensitive and personal information is requested and warns of fraudulent activity that uses its name.",
+      "groups": [
+        {"name": "central_bank", "any": ["central bank", "cbuae", "المصرف المركزي", "مصرف الإمارات المركزي", "البنك المركزي"]},
+        {"name": "sensitive_detail", "any": ["card number", "card details", "cvv", "cvc", "pin", "password", "security code", "account number", "bank details", "account details", "رقم البطاقة", "رقم الحساب", "الرقم السري", "كلمة المرور", "كلمة السر", "رمز الأمان", "بيانات البطاقة", "بيانات الحساب", "بيانات البنك"]}
+      ],
+      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"],
+      "template_id": "banking",
+      "result": "verify",
+      "source": {
+        "title": "CBUAE, UBF, Abu Dhabi Police and Dubai Police launch national fraud awareness campaign",
+        "publisher": "Central Bank of the UAE",
+        "url": "https://www.centralbank.ae/media/avkdwwpj/cbuae-ubf-abu-dhabi-police-and-dubai-police-join-forces-to-launch-uaes-first-national-fraud-awareness-campaign_1.pdf",
+        "level": "primary",
+        "published": "2020-04-14",
+        "checked": "2026-11-22"
+      },
+      "reviewed": "2026-11-22"
+    }
+  ]
+}
