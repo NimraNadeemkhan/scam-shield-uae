@@ -27,11 +27,20 @@
     "official_route": "Navigate to the organisation's official site manually."
   },
   "no_match": {
-    "summary": "No documented pattern matched. This does not mean the message is safe.",
+    "summary": "Nothing in this message matches a documented pattern. That is not a guarantee.",
     "actions": [
       "If the message asks for money, codes or personal details, or creates urgency, verify through an official channel before acting.",
       "Never use links or phone numbers from the message itself to verify it."
     ],
     "official_route": "Verify through the organisation's official website, app, or the number on your card."
+  },
+  "out_of_scope": {
+    "summary": "The desk has no documented pattern for this kind of message, so it can't tell you either way.",
+    "actions": [
+      "Don't pay, send money, or share IDs or codes because of this message.",
+      "Check with the organisation directly through its official website, app, or a number you already trust.",
+      "If it claims to be from the police, a ministry or an employer, contact them yourself instead of replying."
+    ],
+    "official_route": "Verify through the organisation's official website or app, never through the message."
   }
 }

@@ -1,0 +1,47 @@
+{
+  "_comment": "Topic router, not evidence. These patterns only recognise the KIND of message so the desk can say 'this is outside what I cover' instead of 'no match'. They make no scam claim and cite no source. A topic becomes a real, sourced rule in rules.json once a primary source is added.",
+  "version": "0.1.0",
+  "topics": [
+    {
+      "id": "prize",
+      "title": "a prize or reward message",
+      "groups": [
+        {"name": "prize_word", "any": ["won", "winner", "prize", "lottery", "raffle", "congratulations", "you have been selected", "you've been selected", "reward", "جائزة", "فزت", "ربحت", "مبروك", "سحب"]},
+        {"name": "prize_action", "any": ["claim", "send", "reply", "click", "fee", "pay", "collect", "استلام", "ارسل", "ادفع", "رسوم", "اضغط"]}
+      ]
+    },
+    {
+      "id": "job_visa",
+      "title": "a job or visa offer",
+      "groups": [
+        {"name": "job_word", "any": ["job offer", "vacancy", "hiring", "recruitment", "work visa", "visa", "work permit", "employment offer", "وظيفة", "فرصة عمل", "تأشيرة", "توظيف"]},
+        {"name": "job_money", "any": ["fee", "pay", "deposit", "transfer", "passport", "bank details", "رسوم", "ادفع", "تحويل", "جواز"]}
+      ]
+    },
+    {
+      "id": "government",
+      "title": "a fine or government notice",
+      "groups": [
+        {"name": "gov_word", "any": ["traffic fine", "traffic fines", "violation", "police", "court", "ministry", "tax authority", "مخالفة", "شرطة", "محكمة", "وزارة", "غرامة"]},
+        {"name": "gov_action", "any": ["pay", "link", "immediately", "urgent", "within 24 hours", "deadline", "suspended", "ادفع", "عاجل", "فورا", "فوراً"]}
+      ]
+    },
+    {
+      "id": "id_or_code",
+      "title": "a request for an ID or verification code",
+      "groups": [
+        {"name": "id_request", "any": ["send", "share", "provide", "reply with", "enter", "submit", "give us", "ارسل", "ارسال", "شارك", "زود", "ادخل"]},
+        {"name": "id_term", "any": ["emirates id", "passport", "otp", "verification code", "one-time code", "one time code", "security code", "code sent", "رمز التحقق", "الهوية الإماراتية", "جواز السفر"]}
+      ],
+      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"]
+    },
+    {
+      "id": "money_transfer",
+      "title": "an investment or money-transfer offer",
+      "groups": [
+        {"name": "money_word", "any": ["transfer money", "send money", "wire", "gift card", "crypto", "bitcoin", "usdt", "invest", "investment", "western union", "استثمار", "عملات رقمية", "تحويل مبلغ"]},
+        {"name": "money_cue", "any": ["urgent", "immediately", "quickly", "guaranteed", "profit", "returns", "account", "عاجل", "فورا", "ارباح", "مضمون"]}
+      ]
+    }
+  ]
+}

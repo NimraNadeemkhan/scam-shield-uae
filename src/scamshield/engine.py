@@ -23,6 +23,7 @@ DISCLAIMER = (
 VERDICT_LABELS = {
     "verify": "Verify before taking action",
     "caution": "Treat the link with caution",
+    "out_of_scope": "Outside what this desk covers",
     "no_match": "No documented pattern matched",
 }
 # URL flags strong enough to raise a caution when no rule matched.
@@ -41,6 +42,11 @@ def load_rules() -> dict:
 @lru_cache(maxsize=None)
 def load_templates() -> dict:
     return _read_json("templates.json")
+
+
+@lru_cache(maxsize=None)
+def load_topics() -> dict:
+    return _read_json("topics.json")
 
 
 @lru_cache(maxsize=None)
@@ -82,6 +88,7 @@ class CheckResult:
     recommended_actions: list
     official_route: str
     summary: str
+    topics: list = field(default_factory=list)
     disclaimer: str = DISCLAIMER
     rules_version: str = ""
     engine_version: str = ENGINE_VERSION
@@ -96,6 +103,7 @@ class CheckResult:
             "verdict_label": self.verdict_label,
             "summary": self.summary,
             "categories": self.categories,
+            "topics": self.topics,
             "matches": [m.__dict__ for m in self.matches],
             "url_indicators": self.url_indicators,
             "recommended_actions": self.recommended_actions,
@@ -128,6 +136,24 @@ def _rule_matches(rule: dict, norm_text: str, urls: list):
     return indicators
 
 
+def _topic_matches(norm_text: str) -> list:
+    """Kinds of message the desk does not cover. Recognition only, no scam claim."""
+    found = []
+    for topic in load_topics()["topics"]:
+        if topic.get("suppress_if_any") and _first_term(topic["suppress_if_any"], norm_text):
+            continue
+        indicators = []
+        for group in topic["groups"]:
+            term = _first_term(group["any"], norm_text)
+            if term is None:
+                indicators = None
+                break
+            indicators.append({"group": group["name"], "term": term})
+        if indicators:
+            found.append({"id": topic["id"], "title": topic["title"], "matched_indicators": indicators})
+    return found
+
+
 def check_message(message: str) -> CheckResult:
     if not isinstance(message, str):
         raise TypeError("message must be a string")
@@ -156,12 +182,17 @@ def check_message(message: str) -> CheckResult:
     categories = sorted({m.category for m in matches})
     templates = load_templates()
 
+    topics = []
     if matches:
         verdict, keys = "verify", categories
     elif _url_flag_hit(urls, _CAUTION_FLAGS):
         verdict, keys = "caution", ["url_caution"]
     else:
-        verdict, keys = "no_match", ["no_match"]
+        topics = _topic_matches(norm_text)
+        if topics:
+            verdict, keys = "out_of_scope", ["out_of_scope"]
+        else:
+            verdict, keys = "no_match", ["no_match"]
 
     actions, routes = [], []
     for key in keys:
@@ -176,6 +207,10 @@ def check_message(message: str) -> CheckResult:
         url_indicators=url_indicators,
         recommended_actions=actions,
         official_route=" ".join(routes),
-        summary=templates[keys[0]]["summary"],
+        summary=(
+            "This looks like " + " and ".join(t["title"] for t in topics) + ". " + templates[keys[0]]["summary"]
+            if topics else templates[keys[0]]["summary"]
+        ),
+        topics=topics,
         rules_version=doc["version"],
     )

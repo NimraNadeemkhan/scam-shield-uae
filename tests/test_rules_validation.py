@@ -2,7 +2,7 @@ import copy
 import datetime as dt
 
 from scamshield.engine import _read_json
-from scamshield.validate import validate
+from scamshield.validate import validate, validate_topics
 
 SCHEMA = _read_json("rules.schema.json")
 TEMPLATES = _read_json("templates.json")
@@ -67,3 +67,12 @@ def test_stale_review_only_warns():
     errors, warnings = run(GOOD, today=dt.date(2027, 11, 22))
     assert errors == []
     assert warnings
+
+
+def test_shipped_topics_are_valid():
+    assert validate_topics(_read_json("topics.json")) == []
+
+
+def test_topic_with_single_group_is_rejected():
+    doc = {"topics": [{"id": "x", "title": "t", "groups": [{"name": "a", "any": ["word"]}]}]}
+    assert validate_topics(doc)

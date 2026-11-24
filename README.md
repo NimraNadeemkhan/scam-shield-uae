@@ -4,36 +4,93 @@
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-**A privacy-first checker that recognises documented UAE scam patterns and tells you the safe next step.**
+**Paste a suspicious delivery or banking message (English or Arabic) and get a source-linked explanation of what matches a documented UAE scam warning, and what to do next.**
 
-Paste a suspicious delivery or banking message (English or Arabic). Scam Shield UAE matches it against source-linked rules, explains why it looks risky, and points you to the official channel to verify. It never opens links and never stores your message.
+**Live demo:** _coming soon_ (deploy guide: [docs/deploy.md](docs/deploy.md))
 
-> **Status:** v0.1 - core engine, rules, tests and CI are done. Web UI and live demo are next ([roadmap](#roadmap)).
+![Scam Shield UAE: the result prints as an inspection slip with a rubber-stamp verdict](docs/screenshots/desktop-verify.png)
 
-## Contents
+## The problem
 
-- [What it does (and doesn't)](#what-it-does-and-doesnt)
-- [Quickstart](#quickstart)
-- [Example](#example)
-- [How it works](#how-it-works)
-- [Privacy and safety](#privacy-and-safety)
-- [Evaluation](#evaluation)
-- [Known limitations](#known-limitations)
-- [Sources](#sources)
-- [Project structure](#project-structure)
-- [Roadmap](#roadmap)
+Fake messages that pretend to be couriers, customs authorities or banks are a documented problem in the UAE. Abu Dhabi Customs, DHL and the Central Bank of the UAE have all published warnings (see [Sources](#sources)). But those warnings are spread across separate pages, and nobody has time to read them while a message that says "your parcel is on hold" is sitting on their phone.
 
-## What it does (and doesn't)
+General-purpose scam checkers often return a bare verdict with no evidence, and most are built for English. This project tries a different approach:
 
-| It does | It does not |
+- **Evidence, not a score.** Every rule cites the official page it comes from, with publication and review dates.
+- **Honest verdicts.** It never says "this is a scam", and it never treats "no match" as "safe". There are four outcomes, described [below](#the-four-outcomes).
+- **English and Arabic** in one engine.
+- **Private by design.** The message is analysed in memory. It is never stored, logged or sent back, and links are never opened.
+
+## The four outcomes
+
+| Stamp | Meaning |
 |---|---|
-| Recognise **selected, documented** delivery and banking scam patterns | Claim to detect every scam |
-| Explain which indicators matched, with a cited official source | Say "this is definitely a scam" |
-| Tell you to verify through official channels | Treat "no match" as proof a message is safe |
-| Analyse links passively (lookalikes, shorteners, IP hosts) | Open, fetch or click any link |
-| Work in English and Arabic | Replace police, bank or official reporting |
+| **Verify first** | The message matches a documented warning pattern. Shows the evidence, the source, and the steps to take. |
+| **Check the link** | No message pattern matched, but a link has warning signs (lookalike domain, shortener, raw IP). |
+| **Not covered** | The message looks like a prize, job, fine, investment or code request. The desk has no documented rule for it yet, so it says so instead of guessing. |
+| **No match** | Nothing suspicious found. This is not a guarantee, and the slip says so. |
 
-The promise is deliberately cautious: *"This matches a documented warning pattern. Don't pay, share codes or click links; verify through the official channel."*
+## Tech stack
+
+| Language / format | Used for |
+|---|---|
+| **Python 3.10+** | Rules engine, text normalisation, URL analysis, REST API, CLI, rule validator, evaluator, tests |
+| **JavaScript** (vanilla, no framework) | Front-end logic: the API calls, safe DOM building, highlighting, animation timing |
+| **HTML5 and CSS3** | Accessible, responsive page; animation (print, ink, stamp), `clip-path` and `mask`, dark mode, `prefers-reduced-motion` |
+| **JSON and JSON Schema** | Rules, topics, templates and brand data, validated by a schema in CI |
+| **YAML** | GitHub Actions CI and the Render deploy blueprint |
+| **TOML** | Packaging (`pyproject.toml`) |
+
+Libraries and tools: FastAPI, Pydantic, Uvicorn, jsonschema, pytest, httpx, GitHub Actions, Render.
+
+## Skills this project demonstrates
+
+| Skill | Where to look |
+|---|---|
+| **Backend and API design** | `src/scamshield/api.py`: request validation, structured responses, rate limiting, error handling |
+| **Security thinking** | Strict Content-Security-Policy, security headers, results rendered as text (never HTML), links defanged and never fetched, no logging of user input |
+| **Data modelling and validation** | `rules.json` + JSON Schema + semantic checks (unique IDs, source-domain allowlist, no future dates) that fail CI |
+| **Testing** | 70+ tests: unit, API, rule validation, and a golden-case regression suite with strict `xfail` for known limitations |
+| **Honest evaluation** | `python -m scamshield.evaluate` reports precision, recall and F1 per category and states clearly that the cases are synthetic |
+| **Multilingual text handling** | `normalize.py`: Arabic hamza/ta marbuta/diacritic/tatweel folding, Arabic-Indic digits, zero-width characters |
+| **Front-end craft** | Hand-built UI with no framework: accessible, responsive, animated, with reduced-motion and dark-mode support |
+| **DevOps** | CI matrix across Python versions, one-service deploy blueprint, packaged fonts and data |
+| **Product judgment** | Four cautious verdicts, "not covered" instead of false reassurance, sources shown with every result |
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Message pasted in browser] --> B[POST /check]
+    B --> C[Normalise text<br/>English and Arabic]
+    B --> D[Analyse links<br/>never fetched]
+    C --> E{Rules from rules.json<br/>each with a primary source}
+    D --> E
+    E -->|match| F[Verify first]
+    E -->|no match, risky link| G[Check the link]
+    E -->|no match, risky topic| H[Not covered]
+    E -->|nothing found| I[No match]
+    F --> J[Slip: evidence, source, steps]
+    G --> J
+    H --> J
+    I --> J
+```
+
+1. **Evidence-linked rules** (`src/scamshield/data/rules.json`). Each rule has signal groups and cites a primary source (publisher, URL, publication date, date checked, review date). Rules are data, not hard-coded logic.
+2. **Rules are validated in CI** (`python -m scamshield.validate`): schema, unique IDs, valid templates, source host on a primary-domain allowlist, no future dates. A stale review date only warns, so the build doesn't break just because time passed.
+3. **Passive URL analysis.** Flags shorteners, IP hosts, suspicious TLDs, `user@host` tricks and lookalikes of known official domains. Official domains suppress link-based rules to avoid false alarms.
+4. **Topic router** (`topics.json`). Recognises the *kind* of message (prize, job or visa, fine, code request, investment) so the desk can say "not covered". It cites no source and makes no scam claim.
+5. **Guidance, not a score.** Each result carries concrete next steps from `templates.json`.
+
+## The interface
+
+The site is a customs **inspection desk**. You hand in a message, a scan light sweeps the form, and the result prints as a receipt-style slip. Matching signals are inked in one by one, links are defanged in front of you, and a rubber stamp lands with the verdict. Motion switches off for visitors who prefer reduced motion.
+
+| Not covered | Phone |
+|---|---|
+| ![Not covered result](docs/screenshots/desktop-not-covered.png) | <img src="docs/screenshots/mobile-verify.png" alt="Phone layout" width="260"> |
+
+Fonts are bundled so it looks the same everywhere: [Anton](https://fonts.google.com/specimen/Anton), [Anonymous Pro](https://fonts.google.com/specimen/Anonymous+Pro) and [Source Sans 3](https://fonts.google.com/specimen/Source+Sans+3), all under the SIL Open Font License (licence files are in `src/scamshield/web/static/fonts/`).
 
 ## Quickstart
 
@@ -45,7 +102,15 @@ cd scam-shield-uae
 pip install -e ".[dev]"
 ```
 
-Run a check from the command line:
+Run the website and API:
+
+```bash
+uvicorn scamshield.api:app
+# website:  http://127.0.0.1:8000
+# API docs: http://127.0.0.1:8000/docs
+```
+
+Check a message from the command line:
 
 ```bash
 python -m scamshield "Your parcel is on hold. Update your delivery information: http://dhl-parcel-uae.top/track"
@@ -59,53 +124,27 @@ python -m scamshield.evaluate   # golden cases: precision / recall / F1
 python -m pytest                # full test suite
 ```
 
-Run the API:
-
-```bash
-uvicorn scamshield.api:app
-# POST http://127.0.0.1:8000/check   {"message": "..."}
-```
-
 > **Windows tip:** if `pip` or script activation is blocked by your system policy, use `python -m pip ...` and call tools as `python -m ...` as shown above.
 
-## Example
+## API
 
-```
-Result: Verify before taking action
-This matches a documented delivery/customs impersonation warning pattern.
+`POST /check` with `{"message": "..."}` (1 to 2000 characters, 30 requests per minute per client).
 
-[DEL-001] Shipment claim asking you to update or confirm details via a link
-  Matched: shipment='parcel', update_or_confirm='update', link='(link present)'
-  Source: Abu Dhabi Customs - https://www.adcustoms.gov.ae/... (checked 2026-11-22)
-
-Link hxxp://dhl-parcel-uae[.]top/track: suspicious_tld, lookalike_brand:dhl
-
-What to do:
-  - Do not pay, reply, or open any link in the message.
-  - Check the parcel by opening the courier's official website or app yourself.
-```
-
-A message with no matching pattern gets an honest answer instead:
-
-```
-Result: No documented pattern matched
-No documented pattern matched. This does not mean the message is safe.
+```json
+{
+  "verdict": "verify",
+  "verdict_label": "Verify before taking action",
+  "summary": "This matches a documented delivery/customs impersonation warning pattern.",
+  "categories": ["delivery"],
+  "matches": [{ "rule_id": "DEL-002", "title": "...", "why": "...", "matched_indicators": [], "source": { "publisher": "DHL Express UAE", "url": "https://...", "checked": "2026-11-22" } }],
+  "url_indicators": [{ "url": "hxxps://bit[.]ly/3xYz12", "flags": ["shortener"] }],
+  "recommended_actions": ["Do not pay, reply, or open any link in the message."],
+  "official_route": "Open the courier's official site or app manually.",
+  "disclaimer": "Informational guidance only. ..."
+}
 ```
 
-## How it works
-
-1. **Evidence-linked rules** (`src/scamshield/data/rules.json`). Every rule cites a primary source with publisher, URL, publication date, date checked and review date. Rules are data, not hard-coded logic.
-2. **Rules are validated in CI** (`python -m scamshield.validate`). It checks the JSON schema, unique IDs, valid templates, that each source host is on a primary-domain allowlist, and that no dates are in the future. A stale review date only warns, so the build does not break just because time passed.
-3. **Bilingual matching.** Arabic and English terms, with normalisation for hamza/alef variants, ta marbuta, diacritics, tatweel, Arabic-Indic digits and zero-width characters.
-4. **Passive URL analysis.** Flags shorteners, IP hosts, suspicious TLDs, `user@host` tricks and lookalikes of known official domains (DHL, Abu Dhabi Customs, CBUAE, UBF). Official domains suppress link-based rules to avoid false alarms.
-5. **Official-channel guidance, not a score.** Each result carries concrete next steps from `templates.json`.
-
-## Privacy and safety
-
-- The message is analysed in memory and is **never stored, logged or echoed back** (a test checks the last one).
-- No accounts. Input is length-limited and validated. The API is rate-limited.
-- Links are **never fetched**, and are returned defanged (`hxxp://evil[.]top`) so they cannot be clicked.
-- Please do not paste passwords, OTPs or full card numbers.
+`verdict` is one of `verify`, `caution`, `out_of_scope`, `no_match`. Other routes: `GET /rules` (every rule with its source), `GET /health`.
 
 ## Evaluation
 
@@ -113,7 +152,7 @@ No documented pattern matched. This does not mean the message is safe.
 python -m scamshield.evaluate
 ```
 
-Latest run on 24 golden cases:
+Latest run on 30 golden cases:
 
 | Category | Positive cases | TP | FP | FN | Precision | Recall | F1 |
 |---|---|---|---|---|---|---|---|
@@ -122,21 +161,21 @@ Latest run on 24 golden cases:
 
 > **Read these numbers carefully.** The cases are synthetic and were written by the same person who wrote the rules, from the same advisories. This is a regression suite and a sanity check, **not** a measure of real-world detection. A held-out set of real, redacted messages (never used to write rules) is the next evaluation milestone. Until then the only claim made is: *recognises selected documented UAE scam patterns*.
 
-## Known limitations
+### Known limitations
 
-These are tested, not hidden. Each is marked `known_limitation` in the golden file and run as a strict `xfail`, so the suite tells us if a change fixes one by accident.
+Tested, not hidden. Each is marked `known_limitation` in the golden file and run as a strict `xfail`, so the suite tells us if a change fixes one by accident.
 
 | Case | What happens | Why |
 |---|---|---|
 | `DEL-P07` | "Pay AED 5 customs fee to release it" with no link: no match | The cited advisories describe link-based patterns |
-| `BNK-P05` | "Reply with the code sent to your phone": no match | No primary source for an OTP rule yet, so no OTP rule |
+| `BNK-P05` | "Reply with the code sent to your phone": answered "Not covered", not "Verify first" | No primary source for an OTP rule yet, so no OTP rule |
 | `BNK-N04` | Harmless "update the account number in the spreadsheet": flagged | Keyword rules cannot see intent |
 
 Other weaknesses:
 - Scam messages that copy "never share your PIN" wording can be suppressed.
 - Cyrillic/Latin homoglyphs are not handled.
 - The registrable-domain logic is a small stand-in for the Public Suffix List.
-- Only delivery and banking are covered. Prize, job, visa and government scams are not.
+- Only delivery and banking have sourced rules.
 
 ## Sources
 
@@ -150,19 +189,24 @@ Other weaknesses:
 
 ```
 src/scamshield/       engine, normalisation, URL analysis, API, CLI, validator, evaluator
-  data/               rules.json, schema, templates, brands, primary-source allowlist
-tests/                unit tests + golden cases (tests/golden/cases.jsonl)
+  data/               rules, topics, schema, templates, brands, primary-source allowlist
+  web/                website (HTML, CSS, JS, fonts), served by the API
+tests/                unit and API tests, plus golden cases (tests/golden/cases.jsonl)
+docs/                 deploy guide and screenshots
 .github/workflows/    CI: validate rules, evaluate, test
+render.yaml           one-service deploy config
 ```
 
 ## Roadmap
 
-- [ ] Web UI (checker, examples, method page) and live demo
+- [x] Rules engine, validator, tests and CI
+- [x] Web interface and "Not covered" verdict
+- [ ] Live demo deployed
 - [ ] Held-out evaluation on real, redacted messages
-- [ ] Primary source for an OTP-request pattern, then a rule
-- [ ] Job/visa and government-impersonation categories
+- [ ] Verified directory of official domains and reporting channels
+- [ ] Job/visa and government-impersonation rules, each with a primary source
+- [ ] Primary source for an OTP-request rule
 - [ ] WhatsApp/Telegram forward-to-check bot
-- [ ] Redaction layer (not needed while input is never logged or echoed)
 
 ---
 

@@ -64,6 +64,25 @@ def validate(doc, schema, templates, primary_domains, today=None):
     return errors, warnings
 
 
+def validate_topics(doc) -> list:
+    """Topic router sanity checks: unique ids, every group has terms."""
+    errors, seen = [], set()
+    for topic in doc.get("topics", []):
+        tid = topic.get("id", "(no id)")
+        if tid in seen:
+            errors.append(f"topic {tid}: duplicate id")
+        seen.add(tid)
+        if not topic.get("title"):
+            errors.append(f"topic {tid}: missing title")
+        groups = topic.get("groups") or []
+        if len(groups) < 2:
+            errors.append(f"topic {tid}: needs at least two signal groups so one word alone cannot trigger it")
+        for g in groups:
+            if not g.get("any") or not all(isinstance(t, str) and t.strip() for t in g["any"]):
+                errors.append(f"topic {tid}: group '{g.get('name')}' has no usable terms")
+    return errors
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--strict", action="store_true", help="treat warnings as errors")
@@ -75,6 +94,7 @@ def main(argv=None) -> int:
         _read_json("templates.json"),
         _read_json("primary_domains.json")["domains"],
     )
+    errors += validate_topics(_read_json("topics.json"))
     for w in warnings:
         print(f"WARNING {w}")
     for e in errors:

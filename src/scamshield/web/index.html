@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Scam Shield UAE</title>
+  <meta name="description" content="Check a suspicious delivery or banking message against documented UAE scam patterns. Nothing is stored and links are never opened.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="preload" href="/static/fonts/Anton-Regular.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <!-- Roughens the rubber stamp so the ink looks pressed, not drawn. -->
+  <svg class="svg-defs" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="rough" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="noise"/>
+      <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 3.2 0 -0.75" result="holes"/>
+      <feComposite in="SourceGraphic" in2="holes" operator="in"/>
+    </filter>
+  </svg>
+
+  <a class="skip-link" href="#check">Skip to the checker</a>
+
+  <header class="masthead">
+    <a class="brand" href="/">Scam Shield <span class="brand-uae">UAE</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="#check">Check</a>
+      <a href="#examples">Examples</a>
+      <a href="#how">How it works</a>
+      <a href="#sources">Sources</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="desk" id="check" aria-labelledby="page-title">
+      <div class="desk-head">
+        <h1 class="headline" id="page-title">
+          <span>Check it</span>
+          <span>before</span>
+          <span>you tap.</span>
+        </h1>
+        <p class="lead">Paste a delivery or banking message, in English or Arabic. The desk compares it with documented UAE scam warnings and prints what matched and what to do next. Nothing is stored. Links are never opened.</p>
+      </div>
+
+      <div class="desk-grid">
+        <form id="check-form" class="declaration" novalidate>
+          <div class="form-bar">
+            <label for="message">Message declaration</label>
+            <span class="form-langs">English or Arabic</span>
+          </div>
+          <div class="form-body">
+            <textarea id="message" name="message" rows="9" maxlength="2000" dir="auto" aria-describedby="message-hint" placeholder="Paste the SMS, email or WhatsApp text here"></textarea>
+            <p id="message-hint" class="hint">Don't paste passwords, one-time codes or full card numbers.</p>
+            <div class="form-actions">
+              <button type="submit" id="check-btn" class="btn-stamp">Check message</button>
+              <button type="button" id="clear-btn" class="btn-quiet">Clear</button>
+              <span id="counter" class="counter" aria-live="off">0 / 2000</span>
+            </div>
+          </div>
+        </form>
+
+        <div class="printer" id="printer">
+          <div class="slot" aria-hidden="true"><span class="slot-light"></span></div>
+          <section id="result" class="result" aria-label="Inspection slip">
+            <p class="printer-idle">The desk is ready. Paste a message and press Check message. Your slip prints here.</p>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="examples" aria-labelledby="examples-title">
+      <h2 class="section-title" id="examples-title">Try an example</h2>
+      <p class="section-intro">These messages were written for testing. None came from a real person or company. Select a tag to run it through the desk.</p>
+      <div class="tag-groups">
+        <div class="tag-group">
+          <h3 class="group-title">Looks suspicious</h3>
+          <ul id="examples-suspicious" class="tag-list"></ul>
+        </div>
+        <div class="tag-group">
+          <h3 class="group-title">Looks normal</h3>
+          <ul id="examples-normal" class="tag-list"></ul>
+        </div>
+        <div class="tag-group">
+          <h3 class="group-title">Not covered yet</h3>
+          <ul id="examples-uncovered" class="tag-list"></ul>
+          <p class="hint">This type of scam isn't covered, so the slip says no pattern matched. That is not a sign the message is safe.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section how" id="how" aria-labelledby="how-title">
+      <h2 class="how-title" id="how-title">A match is a reason to verify. No match is not a green light.</h2>
+      <div class="prose">
+        <p>Each rule describes one scam pattern that an official source has warned about, for example a shipment message that asks you to update your details through a link. The desk compares your message with those rules in English and Arabic, and looks at any link for warning signs such as a hidden destination or a copy of a courier's name.</p>
+        <p>If a rule matches, you get the reason, the source it comes from, and the steps to take. If nothing matches, you are told so. That never means a message is safe.</p>
+
+        <h3>What it can't do</h3>
+        <ul>
+          <li>It covers delivery and banking messages only. Prize, job, visa and government scams are not covered yet.</li>
+          <li>It can miss new scams, and it can flag a harmless message that happens to use similar words.</li>
+          <li>It is not an official fraud report. If you've lost money or shared a code, contact your bank and the police straight away.</li>
+        </ul>
+
+        <h3>Your privacy</h3>
+        <ul>
+          <li>Your message is checked in memory. It is not saved, logged or sent back from the server.</li>
+          <li>Links are never opened. They are shown with the dots replaced, so they can't be tapped by mistake.</li>
+          <li>There are no accounts and no tracking.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section" id="sources" aria-labelledby="sources-title">
+      <h2 class="section-title" id="sources-title">Rules and sources</h2>
+      <p class="section-intro">Every rule cites the official page it is based on, with the dates it was published and last checked.</p>
+      <ul id="rules-list" class="ledger" aria-live="polite">
+        <li class="ledger-loading">Loading rules.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Not affiliated with any government authority. Informational guidance only. It is not a substitute for reporting through official channels.</p>
+    <p><a href="https://github.com/NimraNadeemkhan/scam-shield-uae" rel="noopener noreferrer">Source code on GitHub</a> <span id="version" class="version"></span></p>
+  </footer>
+</body>
+</html>

@@ -22,7 +22,7 @@ scamshield = "scamshield.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-scamshield = ["data/*.json"]
+scamshield = ["data/*.json", "web/*.html", "web/static/*", "web/static/fonts/*"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

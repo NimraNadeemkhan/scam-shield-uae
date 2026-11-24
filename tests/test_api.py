@@ -43,3 +43,34 @@ def test_message_is_not_echoed(client):
     secret = "my-unique-secret-token-12345"
     r = client.post("/check", json={"message": f"hello {secret}"})
     assert secret not in r.text
+
+
+def test_home_page_is_served(client):
+    r = client.get("/")
+    assert r.status_code == 200
+    assert "text/html" in r.headers["content-type"]
+    assert "Scam Shield UAE" in r.text
+
+
+def test_static_assets_are_served(client):
+    assert client.get("/static/style.css").status_code == 200
+    assert client.get("/static/app.js").status_code == 200
+    assert client.get("/static/fonts/Anton-Regular.woff").status_code == 200
+
+
+def test_security_headers_present(client):
+    r = client.get("/")
+    assert r.headers["x-content-type-options"] == "nosniff"
+    assert r.headers["x-frame-options"] == "DENY"
+    csp = r.headers["content-security-policy"]
+    assert "default-src 'self'" in csp and "unsafe-inline" not in csp
+
+
+def test_check_responses_are_not_cached(client):
+    r = client.post("/check", json={"message": "hello"})
+    assert r.headers["cache-control"] == "no-store"
+
+
+def test_rules_endpoint_lists_sources(client):
+    body = client.get("/rules").json()
+    assert body["rules"] and all(r["source"]["url"].startswith("https://") for r in body["rules"])
