@@ -49,7 +49,7 @@ General-purpose scam checkers often return a bare verdict with no evidence, and 
 |---|---|
 | 🟥 **Verify first** | The message matches a documented warning pattern. Shows the evidence, the source and the steps to take. |
 | 🟧 **Check the link** | No message pattern matched, but a link has warning signs (lookalike domain, shortener, raw IP). |
-| 🟦 **Not covered** | The message looks like a prize, job, fine, investment or code request. The desk has no documented rule for it yet, so it says so instead of guessing. |
+| 🟦 **Not covered** | The message looks like a prize, fine, investment or code request. The desk has no documented rule for it yet, so it says so instead of guessing. |
 | ⬜ **No match** | Nothing suspicious found. This is not a guarantee, and the slip says so. |
 
 ## The interface
@@ -115,7 +115,7 @@ flowchart LR
 1. **Evidence-linked rules** (`src/scamshield/data/rules.json`). Each rule has signal groups and cites a primary source: publisher, URL, publication date, date checked and review date. Rules are data, not hard-coded logic.
 2. **Rules are validated in CI** (`python -m scamshield.validate`): schema, unique IDs, valid templates, source host on a primary-domain allowlist, no future dates. A stale review date only warns, so the build doesn't break just because time passed.
 3. **Passive URL analysis.** Flags shorteners, IP hosts, suspicious TLDs, `user@host` tricks and lookalikes of known official domains. Official domains suppress link-based rules to avoid false alarms.
-4. **Topic router** (`topics.json`). Recognises the kind of message (prize, job or visa, fine, code request, investment) so the desk can say "not covered". It cites no source and makes no scam claim.
+4. **Topic router** (`topics.json`). Recognises the kind of message (prize, fine, code request, investment, money transfer) so the desk can say "not covered". It cites no source and makes no scam claim.
 5. **Guidance, not a score.** Each result carries concrete next steps from `templates.json`.
 
 ## Quickstart
@@ -184,12 +184,13 @@ Other routes: `GET /rules` (every rule with its source) and `GET /health`.
 python -m scamshield.evaluate
 ```
 
-Latest run on 30 golden cases:
+Latest run on 36 golden cases:
 
 | Category | Positive cases | TP | FP | FN | Precision | Recall | F1 |
 |---|---|---|---|---|---|---|---|
 | Delivery | 7 | 6 | 0 | 1 | 1.00 | 0.86 | 0.92 |
 | Banking | 5 | 4 | 1 | 1 | 0.80 | 0.80 | 0.80 |
+| Job and visa | 5 | 5 | 0 | 0 | 1.00 | 1.00 | 1.00 |
 
 > **Read these numbers carefully.** The cases are synthetic and were written by the same person who wrote the rules, from the same advisories. This is a regression suite and a sanity check, **not** a measure of real-world detection. A held-out set of real, redacted messages (never used to write rules) is the next evaluation milestone. Until then the only claim made is: *recognises selected documented UAE scam patterns*.
 
@@ -211,7 +212,7 @@ Other weaknesses:
 - Scam messages that copy "never share your PIN" wording can be suppressed.
 - Cyrillic/Latin homoglyphs are not handled.
 - The registrable-domain logic is a small stand-in for the Public Suffix List.
-- Only delivery and banking have sourced rules.
+- Only delivery, banking and job/visa have sourced rules. The perfect job/visa score comes from only 5 synthetic cases, so it proves little.
 
 </details>
 
@@ -222,6 +223,7 @@ Other weaknesses:
 | Abu Dhabi Customs | Warning on fraudulent text messages impersonating the authority | 2026-03-10 | DEL-001 |
 | DHL Express UAE | Fraud awareness page | n/a (checked 2026-11-22) | DEL-002, DEL-003, DEL-004, official DHL domains |
 | Central Bank of the UAE | National fraud awareness campaign release (with UBF, Abu Dhabi Police, Dubai Police) | 2020-04-14 | BNK-001, BNK-002, BNK-003 |
+| UAE Government portal (u.ae) | Tips to stay safe from labour and visa fraud | n/a (page updated 2026-11-10, checked 2026-11-24) | JOB-001, JOB-002 |
 
 ## Project structure
 
@@ -242,7 +244,8 @@ render.yaml           one-service deploy config
 - [ ] Live demo deployed
 - [ ] Held-out evaluation on real, redacted messages
 - [ ] Verified directory of official domains and reporting channels
-- [ ] Job/visa and government-impersonation rules, each with a primary source
+- [x] Job/visa rules, each with a primary source
+- [ ] Government-impersonation (fines, police) rules, each with a primary source
 - [ ] Primary source for an OTP-request rule
 - [ ] WhatsApp/Telegram forward-to-check bot
 

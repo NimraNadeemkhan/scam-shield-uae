@@ -10,6 +10,7 @@
       { label: "Delivery fee with a short link", text: SAMPLE },
       { label: "Arabic shipment update", text: "تعذر توصيل شحنتك. يرجى تحديث بياناتك عبر الرابط https://uae-post-track.top/x" },
       { label: "Card blocked, send your PIN", text: "Your card is blocked. Reply with your card number and PIN to reactivate." },
+      { label: "Job offer with a visa fee", text: "Job offer in Dubai: salary AED 9,000. Pay a visa fee of AED 1,500 to start." },
     ],
     normal: [
       { label: "Dinner plans", text: "Hey, are we still on for dinner tonight?" },
@@ -18,7 +19,6 @@
     ],
     uncovered: [
       { label: "Prize message", text: "Congratulations! You won AED 50,000. Send your name and Emirates ID to claim." },
-      { label: "Job offer with a visa fee", text: "Job offer in Dubai: salary AED 9,000. Pay a visa fee of AED 1,500 to start." },
       { label: "Traffic fine in Arabic", text: "مخالفة مرورية: ادفع الغرامة فورا لتجنب الحجز" },
       { label: "Asked for a verification code", text: "Please send me the verification code you just received." },
     ],
@@ -44,6 +44,9 @@
     prize_word: "sounds like a prize or reward",
     prize_action: "asks you to claim, pay or reply",
     job_word: "mentions a job or visa",
+    job_offer: "offers a job or work visa",
+    payment_request: "asks you to pay or transfer money",
+    visit_visa: "mentions a visit or tourist visa",
     job_money: "asks for a fee, money or documents",
     gov_word: "mentions a fine or an authority",
     gov_action: "pushes you to pay or act fast",

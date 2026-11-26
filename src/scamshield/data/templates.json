@@ -42,5 +42,16 @@
       "If it claims to be from the police, a ministry or an employer, contact them yourself instead of replying."
     ],
     "official_route": "Verify through the organisation's official website or app, never through the message."
+  },
+  "job_visa": {
+    "summary": "This matches a documented job/visa warning pattern from the UAE Government portal.",
+    "actions": [
+      "Do not pay any fee, send a deposit, or share your passport or bank details because of this message.",
+      "Check that a real job offer exists: the UAE Government portal says an offer must be issued through the Ministry of Human Resources and Emiratisation (MOHRE), and that you can check its reference number on MOHRE's enquiry service.",
+      "Check that the company legally exists in the National Economic Register.",
+      "Do not travel or start work on a visit or tourist visa: it does not give the right to work in the UAE.",
+      "Contact MOHRE through its official website, ask@mohre.gov.ae or the number on that website, not any contact in the message."
+    ],
+    "official_route": "Open the MOHRE website or app yourself and look up the offer."
   }
 }

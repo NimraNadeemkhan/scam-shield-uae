@@ -8,7 +8,7 @@ SCHEMA = _read_json("rules.schema.json")
 TEMPLATES = _read_json("templates.json")
 DOMAINS = _read_json("primary_domains.json")["domains"]
 GOOD = _read_json("rules.json")
-TODAY = dt.date(2026, 11, 22)
+TODAY = dt.date(2026, 11, 24)
 
 
 def run(doc, today=TODAY):

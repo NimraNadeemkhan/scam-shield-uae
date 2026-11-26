@@ -1,4 +1,10 @@
 {
   "_comment": "Hosts a rule's source.url may point to. A rule citing anything else fails validation. Add a domain only after confirming it is the authority or organisation itself.",
-  "domains": ["adcustoms.gov.ae", "dhl.com", "centralbank.ae", "uaebf.ae"]
+  "domains": [
+    "adcustoms.gov.ae",
+    "dhl.com",
+    "centralbank.ae",
+    "uaebf.ae",
+    "u.ae"
+  ]
 }

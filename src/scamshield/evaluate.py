@@ -15,7 +15,7 @@ from pathlib import Path
 from .engine import check_message
 
 DEFAULT_CASES = Path(__file__).resolve().parents[2] / "tests" / "golden" / "cases.jsonl"
-CATEGORIES = ["delivery", "banking"]
+CATEGORIES = ["delivery", "banking", "job_visa"]
 
 
 def load_cases(path: Path) -> list:

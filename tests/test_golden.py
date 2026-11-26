@@ -32,6 +32,6 @@ def test_case_ids_are_unique_and_labelled():
 
 
 def test_every_category_has_positive_and_negative_cases():
-    for category in ("delivery", "banking"):
+    for category in ("delivery", "banking", "job_visa"):
         assert any(category in c["expected_categories"] for c in CASES)
     assert any(not c["expected_categories"] and c["expected_verdict"] == "no_match" for c in CASES)

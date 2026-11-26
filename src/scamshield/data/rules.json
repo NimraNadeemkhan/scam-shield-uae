@@ -8,9 +8,42 @@
       "status": "active",
       "description": "The message mentions a shipment, asks you to update or confirm information, and includes a link. Abu Dhabi Customs warns of fake SMS/iMessage messages impersonating the authority and shipping companies that claim a shipment and ask recipients to update information, with links that may be harmful.",
       "groups": [
-        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]},
-        {"name": "update_or_confirm", "any": ["update", "confirm", "verify", "validate", "reschedule", "تحديث", "تأكيد", "تحقق", "حدث بياناتك", "حدث معلوماتك"]},
-        {"name": "link", "has_url": true}
+        {
+          "name": "shipment",
+          "any": [
+            "parcel",
+            "parcels",
+            "shipment",
+            "package",
+            "consignment",
+            "delivery",
+            "courier",
+            "tracking",
+            "شحنة",
+            "شحنتك",
+            "طرد",
+            "توصيل"
+          ]
+        },
+        {
+          "name": "update_or_confirm",
+          "any": [
+            "update",
+            "confirm",
+            "verify",
+            "validate",
+            "reschedule",
+            "تحديث",
+            "تأكيد",
+            "تحقق",
+            "حدث بياناتك",
+            "حدث معلوماتك"
+          ]
+        },
+        {
+          "name": "link",
+          "has_url": true
+        }
       ],
       "suppress_if_all_urls_official": true,
       "template_id": "delivery",
@@ -32,9 +65,27 @@
       "status": "active",
       "description": "The message mentions a shipment and hides its destination behind a link shortener. DHL lists shortened links (for example bit.ly) in fake delivery SMS as a warning sign.",
       "groups": [
-        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]}
+        {
+          "name": "shipment",
+          "any": [
+            "parcel",
+            "parcels",
+            "shipment",
+            "package",
+            "consignment",
+            "delivery",
+            "courier",
+            "tracking",
+            "شحنة",
+            "شحنتك",
+            "طرد",
+            "توصيل"
+          ]
+        }
       ],
-      "url_flags_any": ["shortener"],
+      "url_flags_any": [
+        "shortener"
+      ],
       "template_id": "delivery",
       "result": "verify",
       "source": {
@@ -54,9 +105,47 @@
       "status": "active",
       "description": "The message ties a payment or fee to a shipment and includes a link. DHL lists payment requests as a fraud pattern and states that its only payment requests by email or SMS are for customs duties and taxes, so unsolicited fee requests should be verified through DHL support rather than the message.",
       "groups": [
-        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]},
-        {"name": "payment", "any": ["pay", "payment", "fee", "fees", "charge", "charges", "customs duty", "customs duties", "customs fee", "settle", "رسوم", "ادفع", "دفع", "سداد", "سدد"]},
-        {"name": "link", "has_url": true}
+        {
+          "name": "shipment",
+          "any": [
+            "parcel",
+            "parcels",
+            "shipment",
+            "package",
+            "consignment",
+            "delivery",
+            "courier",
+            "tracking",
+            "شحنة",
+            "شحنتك",
+            "طرد",
+            "توصيل"
+          ]
+        },
+        {
+          "name": "payment",
+          "any": [
+            "pay",
+            "payment",
+            "fee",
+            "fees",
+            "charge",
+            "charges",
+            "customs duty",
+            "customs duties",
+            "customs fee",
+            "settle",
+            "رسوم",
+            "ادفع",
+            "دفع",
+            "سداد",
+            "سدد"
+          ]
+        },
+        {
+          "name": "link",
+          "has_url": true
+        }
       ],
       "suppress_if_all_urls_official": true,
       "template_id": "delivery",
@@ -78,9 +167,27 @@
       "status": "active",
       "description": "The message mentions a shipment and links to a domain that contains a known courier or customs name but is not one of that organisation's published domains. DHL publishes its legitimate sender and link domains and warns of lookalike addresses.",
       "groups": [
-        {"name": "shipment", "any": ["parcel", "parcels", "shipment", "package", "consignment", "delivery", "courier", "tracking", "شحنة", "شحنتك", "طرد", "توصيل"]}
+        {
+          "name": "shipment",
+          "any": [
+            "parcel",
+            "parcels",
+            "shipment",
+            "package",
+            "consignment",
+            "delivery",
+            "courier",
+            "tracking",
+            "شحنة",
+            "شحنتك",
+            "طرد",
+            "توصيل"
+          ]
+        }
       ],
-      "url_flags_any": ["lookalike_brand"],
+      "url_flags_any": [
+        "lookalike_brand"
+      ],
       "template_id": "delivery",
       "result": "verify",
       "source": {
@@ -100,10 +207,67 @@
       "status": "active",
       "description": "The message asks you to send, enter or confirm card numbers, PINs, passwords, security codes or account numbers. Dubai Police advise against sharing account numbers, card numbers, passwords, personal identification codes or the security code on the back of a card.",
       "groups": [
-        {"name": "request", "any": ["send", "share", "provide", "enter", "submit", "reply with", "confirm", "update", "verify", "give us", "ارسل", "ارسال", "شارك", "زود", "ادخل", "ادخال", "تأكيد", "تحديث", "تحقق"]},
-        {"name": "sensitive_detail", "any": ["card number", "card details", "cvv", "cvc", "pin", "password", "security code", "account number", "bank details", "account details", "رقم البطاقة", "رقم الحساب", "الرقم السري", "كلمة المرور", "كلمة السر", "رمز الأمان", "بيانات البطاقة", "بيانات الحساب", "بيانات البنك"]}
+        {
+          "name": "request",
+          "any": [
+            "send",
+            "share",
+            "provide",
+            "enter",
+            "submit",
+            "reply with",
+            "confirm",
+            "update",
+            "verify",
+            "give us",
+            "ارسل",
+            "ارسال",
+            "شارك",
+            "زود",
+            "ادخل",
+            "ادخال",
+            "تأكيد",
+            "تحديث",
+            "تحقق"
+          ]
+        },
+        {
+          "name": "sensitive_detail",
+          "any": [
+            "card number",
+            "card details",
+            "cvv",
+            "cvc",
+            "pin",
+            "password",
+            "security code",
+            "account number",
+            "bank details",
+            "account details",
+            "رقم البطاقة",
+            "رقم الحساب",
+            "الرقم السري",
+            "كلمة المرور",
+            "كلمة السر",
+            "رمز الأمان",
+            "بيانات البطاقة",
+            "بيانات الحساب",
+            "بيانات البنك"
+          ]
+        }
       ],
-      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"],
+      "suppress_if_any": [
+        "never share",
+        "do not share",
+        "don't share",
+        "never ask",
+        "will never ask",
+        "won't ask",
+        "will not ask",
+        "لن نطلب",
+        "لا تشارك",
+        "لن يطلب"
+      ],
       "template_id": "banking",
       "result": "verify",
       "source": {
@@ -123,11 +287,56 @@
       "status": "active",
       "description": "The message refers to your bank, account or card and asks you to update or verify your details. The campaign documents Abu Dhabi Police cases where callers posing as bank staff asked victims to update their bank details.",
       "groups": [
-        {"name": "bank_context", "any": ["bank", "account", "card", "بنك", "البنك", "حساب", "بطاقة", "بطاقتك"]},
-        {"name": "update", "any": ["update", "verify", "confirm", "validate", "تحديث", "تأكيد", "تحقق"]},
-        {"name": "details", "any": ["bank details", "account details", "card details", "personal details", "your details", "بيانات", "معلومات"]}
+        {
+          "name": "bank_context",
+          "any": [
+            "bank",
+            "account",
+            "card",
+            "بنك",
+            "البنك",
+            "حساب",
+            "بطاقة",
+            "بطاقتك"
+          ]
+        },
+        {
+          "name": "update",
+          "any": [
+            "update",
+            "verify",
+            "confirm",
+            "validate",
+            "تحديث",
+            "تأكيد",
+            "تحقق"
+          ]
+        },
+        {
+          "name": "details",
+          "any": [
+            "bank details",
+            "account details",
+            "card details",
+            "personal details",
+            "your details",
+            "بيانات",
+            "معلومات"
+          ]
+        }
       ],
-      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"],
+      "suppress_if_any": [
+        "never share",
+        "do not share",
+        "don't share",
+        "never ask",
+        "will never ask",
+        "won't ask",
+        "will not ask",
+        "لن نطلب",
+        "لا تشارك",
+        "لن يطلب"
+      ],
       "template_id": "banking",
       "result": "verify",
       "source": {
@@ -147,10 +356,53 @@
       "status": "active",
       "description": "The message invokes the Central Bank of the UAE and asks for sensitive account or card details. The CBUAE urges caution when sensitive and personal information is requested and warns of fraudulent activity that uses its name.",
       "groups": [
-        {"name": "central_bank", "any": ["central bank", "cbuae", "المصرف المركزي", "مصرف الإمارات المركزي", "البنك المركزي"]},
-        {"name": "sensitive_detail", "any": ["card number", "card details", "cvv", "cvc", "pin", "password", "security code", "account number", "bank details", "account details", "رقم البطاقة", "رقم الحساب", "الرقم السري", "كلمة المرور", "كلمة السر", "رمز الأمان", "بيانات البطاقة", "بيانات الحساب", "بيانات البنك"]}
+        {
+          "name": "central_bank",
+          "any": [
+            "central bank",
+            "cbuae",
+            "المصرف المركزي",
+            "مصرف الإمارات المركزي",
+            "البنك المركزي"
+          ]
+        },
+        {
+          "name": "sensitive_detail",
+          "any": [
+            "card number",
+            "card details",
+            "cvv",
+            "cvc",
+            "pin",
+            "password",
+            "security code",
+            "account number",
+            "bank details",
+            "account details",
+            "رقم البطاقة",
+            "رقم الحساب",
+            "الرقم السري",
+            "كلمة المرور",
+            "كلمة السر",
+            "رمز الأمان",
+            "بيانات البطاقة",
+            "بيانات الحساب",
+            "بيانات البنك"
+          ]
+        }
       ],
-      "suppress_if_any": ["never share", "do not share", "don't share", "never ask", "will never ask", "won't ask", "will not ask", "لن نطلب", "لا تشارك", "لن يطلب"],
+      "suppress_if_any": [
+        "never share",
+        "do not share",
+        "don't share",
+        "never ask",
+        "will never ask",
+        "won't ask",
+        "will not ask",
+        "لن نطلب",
+        "لا تشارك",
+        "لن يطلب"
+      ],
       "template_id": "banking",
       "result": "verify",
       "source": {
@@ -162,6 +414,132 @@
         "checked": "2026-11-22"
       },
       "reviewed": "2026-11-22"
+    },
+    {
+      "id": "JOB-001",
+      "category": "job_visa",
+      "title": "Job or visa offer that asks you to pay or transfer money",
+      "status": "active",
+      "description": "The message offers a job, recruitment or work visa and asks for a fee, deposit or transfer. The UAE Government portal says the employer is responsible for recruitment expenses under the UAE Labour Law, and that a job offer should be issued through MOHRE.",
+      "groups": [
+        {
+          "name": "job_offer",
+          "any": [
+            "job offer",
+            "vacancy",
+            "vacancies",
+            "hiring",
+            "recruitment",
+            "employment offer",
+            "offer letter",
+            "work visa",
+            "work permit",
+            "وظيفة",
+            "وظائف",
+            "فرصة عمل",
+            "توظيف",
+            "عرض عمل",
+            "تأشيرة عمل"
+          ]
+        },
+        {
+          "name": "payment_request",
+          "any": [
+            "pay",
+            "fee",
+            "fees",
+            "deposit",
+            "transfer",
+            "payment",
+            "processing charge",
+            "رسوم",
+            "ادفع",
+            "دفع",
+            "تحويل",
+            "وديعة"
+          ]
+        }
+      ],
+      "suppress_if_any": [
+        "no fee",
+        "no fees",
+        "free of charge",
+        "without any fee",
+        "never ask",
+        "will never ask",
+        "do not pay",
+        "don't pay",
+        "لا رسوم",
+        "مجانا",
+        "مجانًا"
+      ],
+      "template_id": "job_visa",
+      "result": "verify",
+      "source": {
+        "title": "Tips to stay safe from labour and visa fraud",
+        "publisher": "The UAE Government portal (u.ae)",
+        "url": "https://u.ae/en/information-and-services/visa-and-emirates-id/Visa-information/tips-to-avoid-labour-and-visa-fraud",
+        "level": "primary",
+        "published": null,
+        "checked": "2026-11-24"
+      },
+      "reviewed": "2026-11-24"
+    },
+    {
+      "id": "JOB-002",
+      "category": "job_visa",
+      "title": "Job offer paired with a visit or tourist visa",
+      "status": "active",
+      "description": "The message offers a job or work and says to come on a visit or tourist visa. The UAE Government portal states that a visit or tourist entry permit does not give you the right to work in the UAE.",
+      "groups": [
+        {
+          "name": "job_offer",
+          "any": [
+            "job offer",
+            "vacancy",
+            "vacancies",
+            "hiring",
+            "recruitment",
+            "employment",
+            "work for",
+            "وظيفة",
+            "وظائف",
+            "فرصة عمل",
+            "توظيف",
+            "عرض عمل"
+          ]
+        },
+        {
+          "name": "visit_visa",
+          "any": [
+            "visit visa",
+            "tourist visa",
+            "visitor visa",
+            "visit permit",
+            "tourist entry",
+            "تأشيرة زيارة",
+            "تأشيرة سياحية",
+            "تاشيرة زيارة"
+          ]
+        }
+      ],
+      "suppress_if_any": [
+        "no fee",
+        "no fees",
+        "free of charge",
+        "without any fee"
+      ],
+      "template_id": "job_visa",
+      "result": "verify",
+      "source": {
+        "title": "Tips to stay safe from labour and visa fraud",
+        "publisher": "The UAE Government portal (u.ae)",
+        "url": "https://u.ae/en/information-and-services/visa-and-emirates-id/Visa-information/tips-to-avoid-labour-and-visa-fraud",
+        "level": "primary",
+        "published": null,
+        "checked": "2026-11-24"
+      },
+      "reviewed": "2026-11-24"
     }
   ]
 }

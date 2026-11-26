@@ -90,3 +90,13 @@ def test_legitimate_otp_notice_is_not_out_of_scope():
 def test_a_matched_rule_wins_over_a_topic():
     r = check_message("Pay a redelivery fee for your parcel https://bit.ly/abc, you won a prize")
     assert r.verdict == "verify" and r.topics == []
+
+
+def test_job_offer_asking_for_a_fee_is_matched_with_a_source():
+    r = check_message("Job offer in Dubai. Pay a visa fee of AED 1,500 to start.")
+    assert r.verdict == "verify" and r.categories == ["job_visa"]
+    assert "u.ae" in r.matches[0].source["url"]
+
+
+def test_job_offer_saying_no_fees_is_not_flagged():
+    assert check_message("Hiring now. No fees at any stage. Apply on our careers page.").verdict == "no_match"
