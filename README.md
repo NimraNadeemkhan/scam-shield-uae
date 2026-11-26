@@ -10,7 +10,7 @@
 ![Tests](https://img.shields.io/badge/tests-84-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
-[**Live demo**](#live-demo) · [The problem](#the-problem) · [Tech stack](#tech-stack) · [Skills](#skills-this-project-demonstrates) · [Quickstart](#quickstart) · [Evaluation](#evaluation)
+[**Live demo**](https://scam-shield-uae-jdtd.onrender.com) · [The problem](#the-problem) · [Tech stack](#tech-stack) · [Skills](#skills-this-project-demonstrates) · [Quickstart](#quickstart) · [Evaluation](#evaluation)
 
 <img src="docs/screenshots/desktop-verify.png" alt="Scam Shield UAE: the result prints as an inspection slip with a rubber-stamp verdict" width="860">
 
@@ -18,7 +18,9 @@
 
 ## Live demo
 
-> 🚧 _Coming soon._ Deploy guide: [docs/deploy.md](docs/deploy.md)
+**https://scam-shield-uae-jdtd.onrender.com**
+
+> Hosted on Render's free plan, so the first visit after a quiet period can take up to a minute to wake the server. Deploy guide: [docs/deploy.md](docs/deploy.md)
 
 ## At a glance
 
@@ -241,7 +243,7 @@ render.yaml           one-service deploy config
 
 - [x] Rules engine, validator, tests and CI
 - [x] Web interface and "Not covered" verdict
-- [ ] Live demo deployed
+- [x] Live demo deployed
 - [ ] Held-out evaluation on real, redacted messages
 - [ ] Verified directory of official domains and reporting channels
 - [x] Job/visa rules, each with a primary source
@@ -252,6 +254,12 @@ render.yaml           one-service deploy config
 ---
 
 <div align="center">
+
+*Not affiliated with any government authority. Informational guidance only; not an official fraud report and not a substitute for reporting through official channels.*
+
+Built by [Nimra Nadeem](https://github.com/NimraNadeemkhan)
+
+</div>
 
 *Not affiliated with any government authority. Informational guidance only; not an official fraud report and not a substitute for reporting through official channels.*
 
