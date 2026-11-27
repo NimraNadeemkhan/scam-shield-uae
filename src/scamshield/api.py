@@ -48,7 +48,7 @@ class CheckRequest(BaseModel):
     message: str = Field(min_length=1, max_length=MAX_MESSAGE_LENGTH)
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 def health():
     return {"status": "ok", "engine_version": ENGINE_VERSION}
 

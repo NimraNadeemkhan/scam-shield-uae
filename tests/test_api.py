@@ -19,6 +19,10 @@ def test_health(client):
     assert client.get("/health").json()["status"] == "ok"
 
 
+def test_health_accepts_head_for_uptime_monitors(client):
+    assert client.head("/health").status_code == 200
+
+
 def test_check_returns_structured_result(client):
     r = client.post("/check", json={"message": "Pay a fee for your parcel https://bit.ly/x"})
     assert r.status_code == 200
